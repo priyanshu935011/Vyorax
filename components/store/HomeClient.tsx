@@ -389,16 +389,16 @@ export default function HomeClient({
     accent: "var(--agni)",
   };
   return (
-    <div className="bg-[var(--obsidian)] overflow-x-hidden text-neutral-800 dark:text-neutral-100 pb-10">
+    <div className="bg-[var(--obsidian)] doodle-bg overflow-x-hidden text-neutral-800 dark:text-neutral-100 pb-10">
       {/* 1. BLOOM STYLE ROUNDED HERO CAROUSEL */}
       {config.showSlider !== false && (
-        <section className="relative w-full overflow-hidden pt-4 pb-6 bg-[var(--obsidian)]">
+        <section className="relative w-full overflow-hidden pt-4 pb-6 bg-transparent">
           {/* Mobile version (Peeking layout) */}
           <div className="md:hidden flex space-x-4 overflow-x-auto snap-x snap-mandatory px-5 py-2 no-scrollbar">
             {slides.map((slide: any, idx: number) => (
               <div
                 key={slide.id || idx}
-                className="w-[82vw] flex-shrink-0 snap-center relative aspect-[10/11] rounded-[2.5rem] overflow-hidden bg-neutral-900 border border-[var(--steel)]/60 shadow-lg"
+                className="w-[82vw] flex-shrink-0 snap-center relative aspect-[10/11] rounded-2xl overflow-hidden bg-neutral-900 border border-[var(--steel)]/60 shadow-lg"
               >
                 <Image
                   src={slide.image}
@@ -431,7 +431,7 @@ export default function HomeClient({
           {/* Desktop version (Wide screen carousel) */}
           <div className="hidden md:block max-w-7xl mx-auto px-8 relative">
             <div
-              className="relative w-full h-[460px] rounded-[3rem] overflow-hidden bg-neutral-900 border border-[var(--steel)]/40 shadow-xl"
+              className="relative w-full h-[460px] rounded-2xl overflow-hidden bg-neutral-900 border border-[var(--steel)]/40 shadow-xl"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -623,7 +623,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="py-10 md:py-16 bg-[var(--charcoal)] border-t border-[var(--steel)]/40"
+          className="py-10 md:py-16 bg-transparent border-t border-[var(--steel)]/40"
         >
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-8 text-left">
@@ -774,7 +774,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="py-10 md:py-16 bg-[var(--charcoal)] border-t border-[var(--steel)]/40"
+          className="py-10 md:py-16 bg-transparent border-t border-[var(--steel)]/40"
         >
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
@@ -825,7 +825,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="hidden md:block py-14 bg-[var(--obsidian)] border-t border-[var(--steel)]/40"
+          className="hidden md:block py-14 bg-transparent border-t border-[var(--steel)]/40"
         >
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -938,7 +938,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="py-12 md:py-16 bg-[var(--charcoal)] border-t border-[var(--steel)]/40"
+          className="py-12 md:py-16 bg-transparent border-t border-[var(--steel)]/40"
         >
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
