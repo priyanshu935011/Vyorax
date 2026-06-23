@@ -128,21 +128,8 @@ body {
 
 /* WhatsApp-style subtle sketch background pattern (cycle, fitness, sports, gym) */
 .doodle-bg {
-  position: relative;
-}
-
-.doodle-bg::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%230A0A0A' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(15, 60) scale(0.6)'%3E%3Ccircle cx='25' cy='75' r='10' /%3E%3Ccircle cx='75' cy='75' r='10' /%3E%3Cpath d='M25 75 L45 50 L75 75 M45 50 L65 50 L75 75 M45 50 L40 38 H30 M65 50 L68 38 H78' /%3E%3C/g%3E%3Cg transform='translate(90, 15) scale(0.6)'%3E%3Crect x='100' y='28' width='24' height='4' rx='1' fill='%230A0A0A' /%3E%3Crect x='94' y='18' width='6' height='24' rx='2' fill='%230A0A0A' /%3E%3Crect x='124' y='18' width='6' height='24' rx='2' fill='%230A0A0A' /%3E%3Crect x='86' y='22' width='8' height='16' rx='1' fill='%230A0A0A' /%3E%3Crect x='130' y='22' width='8' height='16' rx='1' fill='%230A0A0A' /%3E%3C/g%3E%3Cg transform='translate(10, 10) scale(0.55)'%3E%3Cellipse cx='30' cy='25' rx='10' ry='12' /%3E%3Cpath d='M30 37 L30 65' /%3E%3Crect x='28' y='65' width='4' height='10' rx='1' fill='%230A0A0A' /%3E%3Cpath d='M55 25 L50 38 H60 Z M50 38 L46 47 H64 L60 38' /%3E%3C/g%3E%3Cg transform='translate(105, 95) scale(0.55)'%3E%3Ccircle cx='30' cy='45' r='16' /%3E%3Cpath d='M20 33 C20 18, 40 18, 40 33' /%3E%3Ctext x='30' y='49' font-size='10' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%230A0A0A' stroke='none'%3E20%3C/text%3E%3C/g%3E%3Cpath d='M90 75 L92 78 L95 79 L92 80 L90 83 L88 80 L85 79 L88 78 Z' fill='%230A0A0A' stroke='none' /%3E%3Cpath d='M65 20 L66 22 L68 23 L66 24 L65 26 L64 24 L62 23 L64 22 Z' fill='%230A0A0A' stroke='none' /%3E%3Cpath d='M145 55 C142 50, 137 50, 137 55 C137 60, 145 66, 145 66 C145 66, 153 60, 153 55 C153 50, 148 50, 145 55 Z' /%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%230A0A0A' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.08'%3E%3Cg transform='translate(15, 60) scale(0.6)'%3E%3Ccircle cx='25' cy='75' r='10' /%3E%3Ccircle cx='75' cy='75' r='10' /%3E%3Cpath d='M25 75 L45 50 L75 75 M45 50 L65 50 L75 75 M45 50 L40 38 H30 M65 50 L68 38 H78' /%3E%3C/g%3E%3Cg transform='translate(90, 15) scale(0.6)'%3E%3Crect x='100' y='28' width='24' height='4' rx='1' fill='%230A0A0A' /%3E%3Crect x='94' y='18' width='6' height='24' rx='2' fill='%230A0A0A' /%3E%3Crect x='124' y='18' width='6' height='24' rx='2' fill='%230A0A0A' /%3E%3Crect x='86' y='22' width='8' height='16' rx='1' fill='%230A0A0A' /%3E%3Crect x='130' y='22' width='8' height='16' rx='1' fill='%230A0A0A' /%3E%3C/g%3E%3Cg transform='translate(10, 10) scale(0.55)'%3E%3Cellipse cx='30' cy='25' rx='10' ry='12' /%3E%3Cpath d='M30 37 L30 65' /%3E%3Crect x='28' y='65' width='4' height='10' rx='1' fill='%230A0A0A' /%3E%3Cpath d='M55 25 L50 38 H60 Z M50 38 L46 47 H64 L60 38' /%3E%3C/g%3E%3Cg transform='translate(105, 95) scale(0.55)'%3E%3Ccircle cx='30' cy='45' r='16' /%3E%3Cpath d='M20 33 C20 18, 40 18, 40 33' /%3E%3Ctext x='30' y='49' font-size='10' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%230A0A0A' stroke='none'%3E20%3C/text%3E%3C/g%3E%3Cpath d='M90 75 L92 78 L95 79 L92 80 L90 83 L88 80 L85 79 L88 78 Z' fill='%230A0A0A' stroke='none' /%3E%3Cpath d='M65 20 L66 22 L68 23 L66 24 L65 26 L64 24 L62 23 L64 22 Z' fill='%230A0A0A' stroke='none' /%3E%3Cpath d='M145 55 C142 50, 137 50, 137 55 C137 60, 145 66, 145 66 C145 66, 153 60, 153 55 C153 50, 148 50, 145 55 Z' /%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
-  opacity: 0.022;
-  pointer-events: none;
-  z-index: 0;
 }
 
