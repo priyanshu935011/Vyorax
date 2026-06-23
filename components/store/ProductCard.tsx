@@ -179,7 +179,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           <button
             onClick={handleAddToCart}
             disabled={isAdding || product.stock === 0}
-            className="w-full mt-3 bg-white text-black font-extrabold text-xs py-2 rounded-full border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-neutral-100 disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full mt-3 bg-[#ffffff] text-[#000000] font-extrabold text-xs py-2 rounded-full border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-[#f3f4f6] disabled:opacity-50 disabled:pointer-events-none"
           >
             {isAdding ? "Adding..." : "Add to Cart"}
           </button>

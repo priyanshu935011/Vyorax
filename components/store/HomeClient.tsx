@@ -418,12 +418,7 @@ export default function HomeClient({
                   <div className="pt-1">
                     <Link
                       href={slide.ctaHref}
-                      style={{
-                        color: "white",
-                        border: "1px solid white",
-                        borderRadius: "5px",
-                      }}
-                      className="inline-block bg-white text-black hover:bg-neutral-100 font-sans font-extrabold text-[11px] px-6 py-2.5 border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-wider transition-all active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+                      className="inline-block bg-[#ffffff] text-[#000000] hover:bg-[#f3f4f6] font-sans font-extrabold text-[11px] px-6 py-2.5 border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-wider transition-all active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
                     >
                       {slide.ctaText || "Add to Cart"}
                     </Link>
