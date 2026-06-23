@@ -5,7 +5,7 @@ const globalForPrisma = globalThis as unknown as {
   dbOfflineUntil: number | undefined
 }
 
-const OFFLINE_COOLDOWN_MS = 300000; // 5 minutes of caching offline state
+const OFFLINE_COOLDOWN_MS = 10000; // 10 seconds of caching offline state
 const QUERY_TIMEOUT_MS = 2500; // 2.5 seconds database query timeout threshold
 
 function queryTimeout(ms: number): Promise<never> {
