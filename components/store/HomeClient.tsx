@@ -830,7 +830,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="py-10 md:py-14 bg-[var(--obsidian)] border-t border-[var(--steel)]/40"
+          className="hidden md:block py-14 bg-[var(--obsidian)] border-t border-[var(--steel)]/40"
         >
           <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -874,7 +874,7 @@ export default function HomeClient({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="py-12 md:py-16 max-w-4xl mx-auto px-5 text-center"
+          className="hidden md:block py-16 max-w-4xl mx-auto px-5 text-center"
         >
           <span className="text-xs uppercase font-sans tracking-[0.25em] font-bold text-[var(--agni)]">
             Rider Diaries
