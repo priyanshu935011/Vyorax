@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core palette (Premium Light Theme) */
+  --obsidian: #FFFFFF;      /* 70% White Base */
+  --charcoal: #FFFFFF;      /* 70% White Base */
+  --carbon: #F5F5F3;        /* Light warm grey surface for cards/panels */
+  --steel: #E5E5E2;         /* Warm Grey border/lines */
+  --ash: #D9D6D1;           /* Warm Grey border/accent (exactly #D9D6D1) */
+  --smoke: #7A7A7A;         /* Muted grey text */
+  --silver: #4A4A48;        /* Muted dark grey text */
+  --chalk: #1F1F1E;         /* Near black text */
+  --white: #0A0A0A;         /* Black text/foreground (Black #0A0A0A) */
+
+  /* Agni (primary accent) - Copper (8% split) */
+  --agni: #B2560D;
+  --agni-light: #D47224;
+  --agni-deep: #8E4007;
+  --agni-glow: rgba(178, 86, 13, 0.08);
+
+  /* Gold (premium accent) - Premium Maroon (2% split) */
+  --gold: #660000;
+  --gold-light: #8E1515;
+
+  /* Forest (success) */
+  --forest: #2A8F50;
+
+  /* Fonts (loaded dynamically in Layout via next/font) */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-sans: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Theme mappings */
+  --background: var(--obsidian);
+  --foreground: var(--white);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--white);
+  background-color: var(--obsidian);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--obsidian);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--carbon);
+  border: 2px solid var(--obsidian);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--agni);
+}
+
+/* Glassmorphism panel (Light Theme) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.glass-panel-glow {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(178, 86, 13, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(178, 86, 13, 0.08);
+}
+
+/* Custom Cursor class for pointer events */
+@media (pointer: fine) {
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* Skeleton animation */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+.skeleton-glow {
+  background-color: var(--carbon);
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Glow effects */
+.glow-text-agni {
+  text-shadow: 0 0 10px rgba(178, 86, 13, 0.4);
+}
+
+.glow-border-agni:hover {
+  border-color: var(--agni);
+  box-shadow: 0 0 15px rgba(178, 86, 13, 0.2);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

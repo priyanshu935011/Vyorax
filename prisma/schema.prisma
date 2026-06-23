@@ -1,0 +1,254 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String?        @unique
+  name          String?
+  phone         String?        @unique
+  password      String?        // For Credentials login
+  role          Role           @default(CUSTOMER)
+  orders        Order[]
+  reviews       Review[]
+  wishlist      WishlistItem[]
+  addresses     Address[]
+  cart          CartItem[]
+  serviceBookings ServiceBooking[]
+  vegaPoints      Int            @default(0)
+  pointsTransactions VegaPointsTransaction[]
+  birthday        DateTime?
+  gender          String?
+  profileRewardClaimed Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  street    String
+  city      String
+  state     String
+  pincode   String
+  phone     String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id            String     @id @default(cuid())
+  name          String
+  slug          String     @unique
+  parentId      String?
+  parent        Category?  @relation("CategoryToSubcategories", fields: [parentId], references: [id], onDelete: Cascade)
+  subcategories Category[] @relation("CategoryToSubcategories")
+  products      Product[]
+  gstRate       Int        @default(18) // GST percentage (e.g. 5, 12, 18, 28)
+  createdAt     DateTime   @default(now())
+}
+
+model Product {
+  id                 String         @id @default(cuid())
+  name               String
+  slug               String         @unique
+  description        String
+  shortDescription   String
+  price              Int            // in paise
+  comparePrice       Int?
+  images             String[]
+  category           Category       @relation(fields: [categoryId], references: [id])
+  categoryId         String
+  stock              Int            @default(0)
+  sku                String         @unique
+  brand              String?
+  tags               String[]
+  specs              Json           // flexible key-value specs
+  cycleSize          Json?          // size guide data
+  assemblyDifficulty Int?           // 1-5
+  whoIsThisFor       Json?          // array of persona objects
+  starterKit         Json?          // bundled accessories
+  relatedProducts    String[]       // product IDs
+  reviews            Review[]
+  orderItems         OrderItem[]
+  wishlistItems      WishlistItem[]
+  cartItems          CartItem[]
+  isActive           Boolean        @default(true)
+  isFeatured         Boolean        @default(false)
+  metaTitle          String?
+  metaDescription    String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  user              User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId            String?
+  guestEmail        String?
+  guestPhone        String?
+  items             OrderItem[]
+  status            OrderStatus @default(PENDING)
+  total             Int
+  address           Json
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  shiprocketOrderId String?
+  trackingId        String?
+  trackingUrl       String?
+  couponCode        String?
+  statusHistory     Json[]      // [{status, timestamp, message}]
+  warrantyClaims    WarrantyClaim[]
+  pointsEarned      Int         @default(0)
+  pointsRedeemed    Int         @default(0)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Int     // in paise
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?
+  guestName  String?
+  rating     Int
+  title      String
+  body       String
+  images     String[]
+  verified   Boolean  @default(false)
+  isApproved Boolean  @default(false)
+  seen       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model SiteSettings {
+  id              String   @id @default("singleton")
+  anthropicApiKey String?
+  razorpayKeyId   String?
+  razorpaySecret  String?
+  shiprocketEmail String?
+  shiprocketPass  String?
+  aiSystemPrompt  String?  // customisable AI personality
+  aiEnabled       Boolean  @default(true)
+  maintenanceMode Boolean  @default(false)
+  freeShippingMin Int      @default(50000) // in paise
+  homepageConfig  Json?    // custom layout configurations, collections, stats, and brand assets
+  updatedAt       DateTime @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model HomeSlide {
+  id         String   @id @default(cuid())
+  title      String
+  subtitle   String
+  desc       String
+  image      String
+  ctaText    String
+  ctaHref    String
+  bgGradient String?  @default("from-orange-600/20 via-neutral-900/5 to-transparent")
+  accent     String?  @default("var(--agni)")
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+model ServiceBooking {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type      String   // "SERVICING" or "REPAIRING"
+  planName  String
+  price     Int      // in paise
+  phone     String
+  address   Json     // {name, street, city, state, pincode}
+  status    String   @default("BOOKED") // "BOOKED", "IN_PROGRESS", "COMPLETED"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServicePackage {
+  id        String   @id @default(cuid())
+  type      String   // "SERVICING" or "REPAIRING"
+  name      String
+  price     Int      // in paise
+  desc      String
+  includes  String[] // Array of service details
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WarrantyClaim {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productName String
+  serialNo    String
+  issueDesc   String
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt   DateTime @default(now())
+}
+
+model VegaPointsTransaction {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount          Int       // positive for earn/addition, negative for redeem/deduction
+  remainingAmount Int       @default(0) // active points remaining for FIFO tracking
+  type            String    // "EARNED", "REDEEMED", "MANUAL_ADD", "MANUAL_SUB", "CANCEL_REFUND", "SIGNUP", "FIRST_ORDER", "BIRTHDAY"
+  reason          String?
+  orderId         String?
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now())
+}
