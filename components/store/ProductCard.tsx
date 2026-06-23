@@ -144,26 +144,26 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
         </div>
 
         {/* Details Area */}
-        <div className="pt-3 flex-1 flex flex-col justify-between">
-          <div>
+        <div className="pt-3 flex-1 flex flex-col justify-between items-center text-center w-full">
+          <div className="w-full">
             {/* Rating */}
-            <div className="flex items-center space-x-1 mb-1.5">
+            <div className="flex justify-center items-center space-x-1 mb-1.5 w-full">
               <StarRating rating={avgRating} size={10} />
               {product.reviewsCount !== undefined && (
                 <span className="text-[9px] text-[var(--smoke)] font-mono">({product.reviewsCount})</span>
               )}
             </div>
 
-            <h3 className="text-sm font-sans font-bold text-[var(--white)] group-hover:text-[var(--agni)] transition-colors line-clamp-1">
+            <h3 className="text-sm font-sans font-bold text-[var(--white)] group-hover:text-[var(--agni)] transition-colors line-clamp-1 text-center w-full">
               {product.name}
             </h3>
-            <p className="text-[11px] text-[var(--smoke)] mt-1 line-clamp-2 leading-tight">
+            <p className="text-[11px] text-[var(--smoke)] mt-1 line-clamp-2 leading-tight text-center w-full">
               {product.shortDescription}
             </p>
           </div>
 
-          <div className="mt-3 pt-2 border-t border-[var(--steel)]/30 flex items-center justify-between">
-            <div className="flex items-baseline space-x-1.5">
+          <div className="mt-2.5 flex items-center justify-center w-full">
+            <div className="flex items-baseline justify-center space-x-1.5">
               <span className="text-base font-display font-bold text-[var(--white)]">
                 ₹{(product.price / 100).toLocaleString("en-IN")}
               </span>
