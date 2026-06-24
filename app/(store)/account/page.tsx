@@ -17,6 +17,9 @@ import {
   ArrowRight,
   Star,
   Wrench,
+  Smartphone,
+  Lock,
+  Edit2,
 } from "lucide-react";
 import { useWishlistStore, useCartStore, usePincodeStore } from "@/lib/store";
 import { MOCK_PRODUCTS } from "@/lib/mockData";
@@ -63,6 +66,15 @@ export default function AccountPage() {
   const [profileRewardClaimed, setProfileRewardClaimed] = useState(false);
   const [profileRewardPoints, setProfileRewardPoints] = useState(100);
   const [expirations, setExpirations] = useState<any[]>([]);
+
+  // Interconnected OTP boxes states and refs
+  const [otpValues, setOtpValues] = useState<string[]>(Array(6).fill(""));
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setOtpInput(otpValues.join(""));
+  }, [otpValues]);
 
   // Load profile settings configuration
   useEffect(() => {
@@ -516,17 +528,89 @@ export default function AccountPage() {
   // Loyalty history simulation / state placeholder
   // We use vegaPoints and pointsTransactions states
 
+  // Handle phone input changes & auto-send OTP on 10 digits
+  const handlePhoneChange = (val: string) => {
+    if (isOtpSent) return;
+    const cleaned = val.replace(/\D/g, "").slice(0, 10);
+    setPhoneInput(cleaned);
+    if (cleaned.length === 10) {
+      handleSendOtp(cleaned);
+    }
+  };
+
   // Handle sending verification OTP
-  const handleSendOtp = () => {
-    if (!phoneInput || phoneInput.trim().length < 10) {
+  const handleSendOtp = (phoneVal?: string) => {
+    const targetPhone = phoneVal || phoneInput;
+    if (!targetPhone || targetPhone.trim().length < 10) {
       alert("Please enter a valid 10-digit mobile number first.");
       return;
     }
     setIsOtpSent(true);
     setOtpTimer(30);
+    
+    // Auto-focus first OTP box after a brief tick
+    setTimeout(() => {
+      otpRefs.current[0]?.focus();
+    }, 150);
+
     alert(
-      `[Sandbox Alert] Temporary Verification OTP sent to mobile number ${phoneInput}! Use any 6-digit code (e.g. 123456) to authenticate.`,
+      `[Sandbox Alert] Temporary Verification OTP sent to mobile number ${targetPhone}! Use any 6-digit code (e.g. 123456) to authenticate.`,
     );
+  };
+
+  // Unlock phone number input to let user edit it
+  const handleEditPhone = () => {
+    setIsOtpSent(false);
+    setOtpValues(Array(6).fill(""));
+    setOtpTimer(0);
+    setTimeout(() => {
+      phoneInputRef.current?.focus();
+    }, 100);
+  };
+
+  // OTP interconnected boxes input handlers
+  const handleOtpChange = (index: number, val: string) => {
+    const cleaned = val.replace(/\D/g, "");
+    if (!cleaned) {
+      const newOtpValues = [...otpValues];
+      newOtpValues[index] = "";
+      setOtpValues(newOtpValues);
+      return;
+    }
+
+    const lastChar = cleaned.slice(-1);
+    const newOtpValues = [...otpValues];
+    newOtpValues[index] = lastChar;
+    setOtpValues(newOtpValues);
+
+    // Auto-focus next field
+    if (index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace") {
+      if (!otpValues[index] && index > 0) {
+        const newOtpValues = [...otpValues];
+        newOtpValues[index - 1] = "";
+        setOtpValues(newOtpValues);
+        otpRefs.current[index - 1]?.focus();
+      } else {
+        const newOtpValues = [...otpValues];
+        newOtpValues[index] = "";
+        setOtpValues(newOtpValues);
+      }
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (pasteData.length === 6) {
+      const newOtpValues = pasteData.split("");
+      setOtpValues(newOtpValues);
+      otpRefs.current[5]?.focus();
+    }
   };
 
   // Handle credentials login submit
@@ -536,8 +620,8 @@ export default function AccountPage() {
       alert("Please request an OTP first.");
       return;
     }
-    if (!otpInput || otpInput.length < 4) {
-      alert("Please enter a valid OTP.");
+    if (!otpInput || otpInput.length < 6) {
+      alert("Please enter a valid 6-digit verification code.");
       return;
     }
     setLoginLoading(true);
@@ -939,49 +1023,79 @@ export default function AccountPage() {
   // --- RENDER LOGIN VIEW ---
   if (!session) {
     return (
-      <div className="bg-[var(--obsidian)] min-h-[85vh] flex items-center justify-center py-16 px-4">
-        <div className="max-w-md w-full bg-[var(--charcoal)] border border-[var(--steel)]/60 rounded-2xl p-8 space-y-6">
+      <div className="bg-[var(--obsidian)] min-h-[85vh] flex items-center justify-center py-16 px-4 relative">
+        {/* Subtle decorative background glows */}
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[var(--agni)]/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[var(--gold)]/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-md w-full glass-panel-glow border border-[var(--steel)]/60 rounded-3xl p-8 space-y-7 shadow-2xl relative overflow-hidden">
+          {/* Subtle accent line on top */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[var(--agni)] via-[var(--gold)] to-[var(--agni)]" />
+
           <div className="text-center">
-            <span className="text-xs uppercase font-sans tracking-[0.2em] font-bold text-[var(--agni)]">
-              Access Arena
+            <span className="text-[10px] uppercase font-sans tracking-[0.25em] font-extrabold text-[var(--agni)]">
+              RIDER SECURE GATEWAY
             </span>
-            <h1 className="text-3xl font-display font-extrabold uppercase text-white mt-1.5">
+            <h1 className="text-3xl font-display font-extrabold uppercase text-white mt-2 tracking-wider">
               SIGN IN TO VYORAX
             </h1>
-            <p className="text-xs text-[var(--smoke)] mt-1.5 font-sans">
-              Enter credentials to view account settings
+            <p className="text-[11px] text-[var(--smoke)] mt-1.5 font-sans">
+              Enter your mobile number to access your account dashboard
             </p>
           </div>
 
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] uppercase font-bold tracking-wider text-[var(--smoke)]">
-                Mobile Number
+          <form onSubmit={handleLoginSubmit} className="space-y-6">
+            {/* Phone Number Section */}
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase font-bold tracking-wider text-[var(--smoke)] flex justify-between">
+                <span>Mobile Number</span>
+                {isOtpSent && <span className="text-[9px] text-[var(--forest)] font-sans lowercase font-semibold">● locked</span>}
               </label>
-              <div className="flex space-x-2">
+              
+              <div className="relative flex items-center">
+                <div className="absolute left-3.5 text-[var(--smoke)]">
+                  {isOtpSent ? (
+                    <Lock size={15} className="text-[var(--smoke)]/70" />
+                  ) : (
+                    <Smartphone size={15} className="text-[var(--smoke)]/70" />
+                  )}
+                </div>
+
                 <input
+                  ref={phoneInputRef}
                   type="tel"
                   required
-                  placeholder="e.g. 8888888888"
+                  maxLength={10}
+                  placeholder="Enter 10-digit phone number"
                   value={phoneInput}
                   disabled={isOtpSent}
-                  onChange={(e) => setPhoneInput(e.target.value)}
-                  className="flex-grow bg-[var(--carbon)] border border-[var(--steel)] rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-[var(--smoke)] focus:outline-none focus:border-[var(--agni)] disabled:opacity-50"
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  className={`w-full bg-[var(--carbon)] border ${
+                    isOtpSent ? "border-[var(--steel)]/40 text-[var(--smoke)] cursor-not-allowed" : "border-[var(--steel)] text-white focus:border-[var(--agni)] focus:shadow-[0_0_10px_var(--agni-glow)]"
+                  } rounded-xl pl-10 pr-16 py-3.5 text-xs font-semibold placeholder-[var(--smoke)]/70 transition-all duration-200 outline-none`}
                 />
-                {!isOtpSent && (
+
+                {isOtpSent && (
                   <button
                     type="button"
-                    onClick={handleSendOtp}
-                    className="px-4 bg-[var(--carbon)] hover:bg-neutral-800 border border-[var(--steel)] text-white text-[10px] uppercase font-bold tracking-wider rounded transition-colors"
+                    onClick={handleEditPhone}
+                    className="absolute right-3 px-3 py-1.5 bg-neutral-900 border border-[var(--steel)]/60 text-white rounded-lg text-[9px] uppercase font-bold tracking-wider hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
                   >
-                    Send OTP
+                    <Edit2 size={9} />
+                    <span>Edit</span>
                   </button>
                 )}
               </div>
             </div>
 
+            {/* OTP Section (Interconnected Boxes) */}
             {isOtpSent && (
-              <div className="space-y-1.5 animate-fadeIn">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-3.5"
+              >
                 <div className="flex justify-between items-center">
                   <label className="text-[10px] uppercase font-bold tracking-wider text-[var(--smoke)]">
                     Verification OTP
@@ -989,30 +1103,45 @@ export default function AccountPage() {
                   <button
                     type="button"
                     disabled={otpTimer > 0}
-                    onClick={handleSendOtp}
-                    className="text-[9px] uppercase font-bold text-[var(--agni)] hover:underline disabled:text-[var(--smoke)] disabled:no-underline"
+                    onClick={() => handleSendOtp(phoneInput)}
+                    className="text-[9px] uppercase font-bold text-[var(--agni)] hover:underline disabled:text-[var(--smoke)] disabled:no-underline font-sans"
                   >
                     {otpTimer > 0 ? `Resend in ${otpTimer}s` : "Resend OTP"}
                   </button>
                 </div>
-                <input
-                  type="text"
-                  required
-                  maxLength={6}
-                  placeholder="Enter any 6-digit OTP (e.g. 123456)"
-                  value={otpInput}
-                  onChange={(e) =>
-                    setOtpInput(e.target.value.replace(/\D/g, ""))
-                  }
-                  className="w-full bg-[var(--carbon)] border border-[var(--steel)] rounded-lg px-3.5 py-2.5 text-xs text-white placeholder-[var(--smoke)] focus:outline-none focus:border-[var(--agni)] font-mono tracking-widest text-center"
-                />
-              </div>
+
+                <div 
+                  className="grid grid-cols-6 gap-2.5 sm:gap-3.5 justify-center py-1"
+                  onPaste={handleOtpPaste}
+                >
+                  {otpValues.map((digit, idx) => (
+                    <input
+                      key={idx}
+                      ref={(el) => {
+                        otpRefs.current[idx] = el;
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={1}
+                      required
+                      value={digit}
+                      onChange={(e) => handleOtpChange(idx, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(idx, e)}
+                      className="w-full aspect-[5/6] bg-[var(--carbon)] border border-[var(--steel)] rounded-xl text-center text-xl font-sans font-extrabold text-white placeholder-neutral-700 focus:border-[var(--agni)] focus:shadow-[0_0_10px_var(--agni-glow)] focus:outline-none transition-all duration-150"
+                    />
+                  ))}
+                </div>
+                <p className="text-[9px] text-[var(--smoke)] font-sans text-center mt-1">
+                  We sent a 6-digit sandbox verification OTP to your phone.
+                </p>
+              </motion.div>
             )}
 
             <button
               type="submit"
-              disabled={loginLoading || !isOtpSent}
-              className="w-full py-3.5 bg-[var(--agni)] hover:bg-[var(--agni-light)] disabled:bg-[var(--steel)] disabled:opacity-50 text-neutral-50 text-xs font-bold uppercase tracking-wider rounded transition-colors mt-2"
+              disabled={loginLoading || !isOtpSent || otpInput.length < 6}
+              className="w-full py-4 bg-[var(--agni)] hover:bg-[var(--agni-light)] disabled:bg-[var(--steel)]/60 disabled:text-neutral-500 disabled:opacity-70 disabled:cursor-not-allowed text-neutral-50 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200 mt-2 shadow-lg"
             >
               {loginLoading ? "Authenticating..." : "Access Dashboard"}
             </button>
