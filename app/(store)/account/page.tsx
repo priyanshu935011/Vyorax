@@ -1023,7 +1023,7 @@ export default function AccountPage() {
   // --- RENDER LOGIN VIEW ---
   if (!session) {
     return (
-      <div className="bg-[var(--obsidian)] min-h-[85vh] flex items-center justify-center py-16 px-4 relative">
+      <div className="bg-[var(--obsidian)] h-[calc(100dvh-8rem)] md:h-auto md:min-h-[85vh] md:py-16 overflow-hidden flex items-center justify-center px-4 relative">
         {/* Subtle decorative background glows */}
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[var(--agni)]/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[var(--gold)]/5 blur-[120px] rounded-full pointer-events-none" />
@@ -1141,7 +1141,7 @@ export default function AccountPage() {
             <button
               type="submit"
               disabled={loginLoading || !isOtpSent || otpInput.length < 6}
-              className="w-full py-4 bg-[var(--agni)] hover:bg-[var(--agni-light)] disabled:bg-[var(--steel)]/60 disabled:text-neutral-500 disabled:opacity-70 disabled:cursor-not-allowed text-neutral-50 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200 mt-2 shadow-lg"
+              className="w-full py-4 bg-gradient-to-r from-[var(--agni)] to-[var(--agni-light)] hover:from-[var(--agni-light)] hover:to-orange-500 active:scale-[0.98] disabled:bg-neutral-900/40 disabled:border disabled:border-[var(--steel)]/30 disabled:text-neutral-500 disabled:shadow-none disabled:cursor-not-allowed text-neutral-50 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200 mt-2 shadow-lg"
             >
               {loginLoading ? "Authenticating..." : "Access Dashboard"}
             </button>
