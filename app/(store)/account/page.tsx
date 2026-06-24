@@ -547,7 +547,7 @@ export default function AccountPage() {
     }
     setIsOtpSent(true);
     setOtpTimer(30);
-    
+
     // Auto-focus first OTP box after a brief tick
     setTimeout(() => {
       otpRefs.current[0]?.focus();
@@ -589,7 +589,10 @@ export default function AccountPage() {
     }
   };
 
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleOtpKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace") {
       if (!otpValues[index] && index > 0) {
         const newOtpValues = [...otpValues];
@@ -605,7 +608,10 @@ export default function AccountPage() {
   };
 
   const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pasteData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const pasteData = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
     if (pasteData.length === 6) {
       const newOtpValues = pasteData.split("");
       setOtpValues(newOtpValues);
@@ -1049,9 +1055,13 @@ export default function AccountPage() {
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold tracking-wider text-[var(--smoke)] flex justify-between">
                 <span>Mobile Number</span>
-                {isOtpSent && <span className="text-[9px] text-[var(--forest)] font-sans lowercase font-semibold">● locked</span>}
+                {isOtpSent && (
+                  <span className="text-[9px] text-[var(--forest)] font-sans lowercase font-semibold">
+                    ● locked
+                  </span>
+                )}
               </label>
-              
+
               <div className="relative flex items-center">
                 <div className="absolute left-3.5 text-[var(--smoke)]">
                   {isOtpSent ? (
@@ -1071,7 +1081,9 @@ export default function AccountPage() {
                   disabled={isOtpSent}
                   onChange={(e) => handlePhoneChange(e.target.value)}
                   className={`w-full bg-[var(--carbon)] border ${
-                    isOtpSent ? "border-[var(--steel)]/40 text-[var(--smoke)] cursor-not-allowed" : "border-[var(--steel)] text-white focus:border-[var(--agni)] focus:shadow-[0_0_10px_var(--agni-glow)]"
+                    isOtpSent
+                      ? "border-[var(--steel)]/40 text-[var(--smoke)] cursor-not-allowed"
+                      : "border-[var(--steel)] text-white focus:border-[var(--agni)] focus:shadow-[0_0_10px_var(--agni-glow)]"
                   } rounded-xl pl-10 pr-16 py-3.5 text-xs font-semibold placeholder-[var(--smoke)]/70 transition-all duration-200 outline-none`}
                 />
 
@@ -1080,6 +1092,7 @@ export default function AccountPage() {
                     type="button"
                     onClick={handleEditPhone}
                     className="absolute right-3 px-3 py-1.5 bg-neutral-900 border border-[var(--steel)]/60 text-white rounded-lg text-[9px] uppercase font-bold tracking-wider hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+                    style={{ color: "white" }}
                   >
                     <Edit2 size={9} />
                     <span>Edit</span>
@@ -1090,7 +1103,7 @@ export default function AccountPage() {
 
             {/* OTP Section (Interconnected Boxes) */}
             {isOtpSent && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
@@ -1110,7 +1123,7 @@ export default function AccountPage() {
                   </button>
                 </div>
 
-                <div 
+                <div
                   className="grid grid-cols-6 gap-2.5 sm:gap-3.5 justify-center py-1"
                   onPaste={handleOtpPaste}
                 >
@@ -1142,8 +1155,9 @@ export default function AccountPage() {
               type="submit"
               disabled={loginLoading || !isOtpSent || otpInput.length < 6}
               className="w-full py-4 bg-gradient-to-r from-[var(--agni)] to-[var(--agni-light)] hover:from-[var(--agni-light)] hover:to-orange-500 active:scale-[0.98] disabled:bg-neutral-900/40 disabled:border disabled:border-[var(--steel)]/30 disabled:text-neutral-500 disabled:shadow-none disabled:cursor-not-allowed text-neutral-50 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200 mt-2 shadow-lg"
+              style={{ color: "white" }}
             >
-              {loginLoading ? "Authenticating..." : "Access Dashboard"}
+              {loginLoading ? "Authenticating..." : "Login"}
             </button>
           </form>
         </div>

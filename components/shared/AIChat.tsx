@@ -76,7 +76,7 @@ export default function AIChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.95 }}
             transition={{ type: "spring", damping: 20, stiffness: 250 }}
-            className="absolute bottom-20 right-0 w-[92vw] sm:w-[400px] h-[500px] max-h-[70vh] sm:h-[550px] bg-[var(--charcoal)] border border-[var(--steel)] rounded-2xl shadow-2xl flex flex-col overflow-hidden glass-panel-glow"
+            className="fixed inset-0 sm:absolute sm:inset-auto sm:bottom-20 sm:right-0 w-screen sm:w-[400px] h-[100dvh] sm:h-[550px] max-h-none bg-[var(--charcoal)] border-0 sm:border border-[var(--steel)]/60 rounded-none sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden glass-panel-glow z-50"
           >
             {/* Panel Header */}
             <div className="p-4 bg-[var(--carbon)] border-b border-[var(--steel)] flex items-center justify-between">
