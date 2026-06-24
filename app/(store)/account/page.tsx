@@ -1017,35 +1017,6 @@ export default function AccountPage() {
               {loginLoading ? "Authenticating..." : "Access Dashboard"}
             </button>
           </form>
-
-          {/* Social login divider */}
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-[var(--steel)]/30"></div>
-            <span className="flex-shrink mx-4 text-[9px] uppercase tracking-wider text-[var(--smoke)] font-bold">
-              Demo Logins
-            </span>
-            <div className="flex-grow border-t border-[var(--steel)]/30"></div>
-          </div>
-
-          {/* Demo Sandbox accounts information */}
-          <div className="bg-[var(--carbon)] p-4 rounded-xl border border-[var(--steel)]/60 space-y-2.5 text-[10px] font-sans">
-            <div>
-              <span className="text-[var(--gold-light)] font-bold uppercase">
-                Customer Account:
-              </span>
-              <div className="text-[var(--silver)] font-mono mt-0.5">
-                customer@vyorax.in (use any temporary OTP)
-              </div>
-            </div>
-            <div>
-              <span className="text-[var(--gold-light)] font-bold uppercase">
-                Admin Portal Account:
-              </span>
-              <div className="text-[var(--silver)] font-mono mt-0.5">
-                admin@vyorax.in (use any temporary OTP)
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );
@@ -1596,10 +1567,12 @@ export default function AccountPage() {
                   {computedCompletionPercent < 100 && !profileRewardClaimed && (
                     <div className="p-4 bg-[var(--carbon)] border border-[var(--steel)]/60 rounded-xl flex flex-col gap-1">
                       <p className="text-xs font-sans font-bold text-white uppercase tracking-wider">
-                        Complete your profile to earn {profileRewardPoints} Vyorax Club Points
+                        Complete your profile to earn {profileRewardPoints}{" "}
+                        Vyorax Club Points
                       </p>
                       <p className="text-[10px] text-[var(--smoke)] font-sans">
-                        Fill in all details (Name, Email, Alternate Phone, Birthday, Gender) to claim your welcome reward.
+                        Fill in all details (Name, Email, Alternate Phone,
+                        Birthday, Gender) to claim your welcome reward.
                       </p>
                     </div>
                   )}
