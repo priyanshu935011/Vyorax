@@ -1875,27 +1875,27 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
         <motion.div
           key={item.id}
           initial={{
-            x: item.startX - 28,
-            y: item.startY - 28,
+            x: item.startX - 20,
+            y: item.startY - 20,
             scale: 1,
             opacity: 1,
           }}
           animate={{
             x: [
-              item.startX - 28,
-              (item.startX + item.endX) / 2 - 28,
-              item.endX - 28,
+              item.startX - 20,
+              (item.startX + item.endX) / 2 - 20,
+              item.endX - 20,
             ],
             y: [
-              item.startY - 28,
-              Math.min(item.startY, item.endY) - 150 - 28,
-              item.endY - 28,
+              item.startY - 20,
+              Math.min(item.startY, item.endY) - 180 - 20,
+              item.endY - 20,
             ],
-            scale: [1, 0.6, 0.15],
+            scale: [1, 0.7, 0.2],
             opacity: [1, 0.9, 0],
           }}
           transition={{
-            duration: 0.85,
+            duration: 1.2,
             ease: "easeInOut",
           }}
           onAnimationComplete={() => {
@@ -1914,17 +1914,15 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
             // Open the cart drawer
             setIsOpen(true);
           }}
-          className="fixed left-0 top-0 w-14 h-14 rounded-full border-2 border-[var(--agni)] shadow-2xl overflow-hidden bg-[var(--obsidian)] z-50 pointer-events-none flex items-center justify-center"
+          className="fixed left-0 top-0 w-10 h-10 rounded-full bg-gradient-to-r from-[var(--agni)] to-[var(--agni-light)] shadow-[0_0_20px_rgba(212,114,36,0.8)] z-50 pointer-events-none flex items-center justify-center border border-white/20"
         >
-          <div className="w-10 h-10 relative">
-            <Image
-              src={product.images[0]}
-              alt="flying item"
-              fill
-              className="object-contain animate-pulse"
-              sizes="40px"
-            />
-          </div>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.2, ease: "linear", repeat: Infinity }}
+            className="flex items-center justify-center"
+          >
+            <Sparkles size={16} className="text-white fill-white" />
+          </motion.div>
         </motion.div>
       ))}
 
