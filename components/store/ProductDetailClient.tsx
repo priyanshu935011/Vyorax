@@ -1895,7 +1895,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
             opacity: [1, 0.9, 0],
           }}
           transition={{
-            duration: 1.2,
+            duration: 2.2,
             ease: "easeInOut",
           }}
           onAnimationComplete={() => {
@@ -1918,7 +1918,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
         >
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1.2, ease: "linear", repeat: Infinity }}
+            transition={{ duration: 2.2, ease: "linear", repeat: Infinity }}
             className="flex items-center justify-center"
           >
             <Sparkles size={16} className="text-white fill-white" />
