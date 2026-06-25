@@ -401,7 +401,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
       stock: product.stock,
       sku: product.sku,
       isCycle, // Pass isCycle flag
-    });
+    }, 1, true);
     router.push("/checkout");
   };
 
