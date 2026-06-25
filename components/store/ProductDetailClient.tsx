@@ -84,12 +84,6 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   const [aiRecsLoading, setAiRecsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
-  const [flyingItems, setFlyingItems] = useState<{ id: number; startX: number; startY: number; endX: number; endY: number }[]>([]);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Recently Viewed State
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
@@ -310,44 +304,8 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     return `https://wa.me/919999999999?text=${encodeURIComponent(text)}`;
   };
 
-  // Fly-to-Cart Animation Trigger
-  const triggerFlyToCartAnimation = (e?: React.MouseEvent) => {
-    const dest = document.getElementById("header-cart-icon");
-    if (!dest) {
-      // Fallback: Open cart drawer directly if header icon is missing
-      setIsOpen(true);
-      return;
-    }
-
-    const destRect = dest.getBoundingClientRect();
-    const endX = destRect.left + destRect.width / 2;
-    const endY = destRect.top + destRect.height / 2;
-
-    let startX = window.innerWidth / 2;
-    let startY = window.innerHeight / 2;
-
-    if (e && e.clientX && e.clientY) {
-      startX = e.clientX;
-      startY = e.clientY;
-    } else if (e && e.currentTarget) {
-      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      startX = rect.left + rect.width / 2;
-      startY = rect.top + rect.height / 2;
-    }
-
-    const newFlyItem = {
-      id: Date.now() + Math.random(),
-      startX,
-      startY,
-      endX,
-      endY,
-    };
-
-    setFlyingItems((prev) => [...prev, newFlyItem]);
-  };
-
   // Add to cart helper
-  const handleAddToCart = (e?: React.MouseEvent) => {
+  const handleAddToCart = () => {
     if (cityStatus !== "serviceable") {
       usePincodeStore.setState({
         status: "unserviceable",
@@ -369,9 +327,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
       stock: product.stock,
       sku: product.sku,
       isCycle, // Pass isCycle flag
-    }, 1, true);
-
-    triggerFlyToCartAnimation(e);
+    });
 
     setTimeout(() => {
       setIsAdding(false);
@@ -1876,66 +1832,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
         </button>
       </div>
 
-      {/* Flying Elements Renderer */}
-      {mounted && typeof document !== "undefined" && createPortal(
-        <>
-          {flyingItems.map((item) => (
-            <motion.div
-              key={item.id}
-              initial={{
-                x: item.startX - 20,
-                y: item.startY - 20,
-                scale: 1,
-                opacity: 1,
-              }}
-              animate={{
-                x: [
-                  item.startX - 20,
-                  (item.startX + item.endX) / 2 - 20,
-                  item.endX - 20,
-                ],
-                y: [
-                  item.startY - 20,
-                  Math.min(item.startY, item.endY) - 180 - 20,
-                  item.endY - 20,
-                ],
-                scale: [1, 0.7, 0.2],
-                opacity: [1, 0.9, 0],
-              }}
-              transition={{
-                duration: 2.2,
-                ease: "easeInOut",
-              }}
-              onAnimationComplete={() => {
-                // Remove from list
-                setFlyingItems((prev) => prev.filter((fi) => fi.id !== item.id));
 
-                // Trigger bounce reaction on the header cart button
-                const cartIcon = document.getElementById("header-cart-icon");
-                if (cartIcon) {
-                  cartIcon.classList.add("animate-bounce-subtle");
-                  setTimeout(() => {
-                    cartIcon.classList.remove("animate-bounce-subtle");
-                  }, 400);
-                }
-
-                // Open the cart drawer
-                setIsOpen(true);
-              }}
-              className="fixed left-0 top-0 w-10 h-10 rounded-full bg-gradient-to-r from-[var(--agni)] to-[var(--agni-light)] shadow-[0_0_20px_rgba(212,114,36,0.8)] z-50 pointer-events-none flex items-center justify-center border border-white/20"
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2.2, ease: "linear", repeat: Infinity }}
-                className="flex items-center justify-center"
-              >
-                <Sparkles size={16} className="text-white fill-white" />
-              </motion.div>
-            </motion.div>
-          ))}
-        </>,
-        document.body
-      )}
 
     </div>
   );
