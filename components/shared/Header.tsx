@@ -296,89 +296,91 @@ export default function Header() {
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <div
-        style={{ backgroundColor: "white" }}
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--steel)]/60 h-16 grid grid-cols-5 items-center justify-items-center shadow-lg select-none pb-safe px-2"
-      >
-        {/* Home */}
-        <Link
-          href="/"
-          className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
-            pathname === "/" ? "text-[var(--agni)]" : "text-[var(--silver)]"
-          }`}
+      {!(pathname.startsWith("/products/") && pathname.split("/").filter(Boolean).length === 2) && (
+        <div
+          style={{ backgroundColor: "white" }}
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--steel)]/60 h-16 grid grid-cols-5 items-center justify-items-center shadow-lg select-none pb-safe px-2"
         >
-          <Home size={18} />
-          <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
-            Home
-          </span>
-        </Link>
+          {/* Home */}
+          <Link
+            href="/"
+            className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
+              pathname === "/" ? "text-[var(--agni)]" : "text-[var(--silver)]"
+            }`}
+          >
+            <Home size={18} />
+            <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
+              Home
+            </span>
+          </Link>
 
-        {/* Services */}
-        <Link
-          href="/servicing"
-          className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
-            pathname.startsWith("/servicing") ||
-            pathname.startsWith("/repairing")
-              ? "text-[var(--agni)]"
-              : "text-[var(--silver)]"
-          }`}
-        >
-          <Wrench size={18} />
-          <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
-            Services
-          </span>
-        </Link>
+          {/* Services */}
+          <Link
+            href="/servicing"
+            className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
+              pathname.startsWith("/servicing") ||
+              pathname.startsWith("/repairing")
+                ? "text-[var(--agni)]"
+                : "text-[var(--silver)]"
+            }`}
+          >
+            <Wrench size={18} />
+            <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
+              Services
+            </span>
+          </Link>
 
-        {/* Shop */}
-        <Link
-          href="/categories"
-          className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
-            pathname.startsWith("/categories")
-              ? "text-[var(--agni)]"
-              : "text-[var(--silver)]"
-          }`}
-        >
-          <ShoppingBag size={18} />
-          <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
-            Shop
-          </span>
-        </Link>
+          {/* Shop */}
+          <Link
+            href="/categories"
+            className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
+              pathname.startsWith("/categories")
+                ? "text-[var(--agni)]"
+                : "text-[var(--silver)]"
+            }`}
+          >
+            <ShoppingBag size={18} />
+            <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
+              Shop
+            </span>
+          </Link>
 
-        {/* Wishlist */}
-        <Link
-          href="/wishlist"
-          className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
-            pathname === "/wishlist"
-              ? "text-[var(--agni)]"
-              : "text-[var(--silver)]"
-          }`}
-        >
-          <Heart
-            size={18}
-            className={
-              wishlistCount > 0 ? "fill-[var(--agni)] text-[var(--agni)]" : ""
-            }
-          />
-          <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
-            Wishlist
-          </span>
-        </Link>
+          {/* Wishlist */}
+          <Link
+            href="/wishlist"
+            className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
+              pathname === "/wishlist"
+                ? "text-[var(--agni)]"
+                : "text-[var(--silver)]"
+            }`}
+          >
+            <Heart
+              size={18}
+              className={
+                wishlistCount > 0 ? "fill-[var(--agni)] text-[var(--agni)]" : ""
+              }
+            />
+            <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
+              Wishlist
+            </span>
+          </Link>
 
-        {/* Account */}
-        <Link
-          href="/account"
-          className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
-            pathname.startsWith("/account") || pathname.startsWith("/admin")
-              ? "text-[var(--agni)]"
-              : "text-[var(--silver)]"
-          }`}
-        >
-          <User size={18} />
-          <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
-            Account
-          </span>
-        </Link>
-      </div>
+          {/* Account */}
+          <Link
+            href="/account"
+            className={`flex flex-col items-center justify-center space-y-1 w-full text-center transition-colors ${
+              pathname.startsWith("/account") || pathname.startsWith("/admin")
+                ? "text-[var(--agni)]"
+                : "text-[var(--silver)]"
+            }`}
+          >
+            <User size={18} />
+            <span className="text-[8px] xs:text-[9px] font-sans font-semibold capitalize tracking-tight">
+              Account
+            </span>
+          </Link>
+        </div>
+      )}
 
       {/* Mobile Full Page Search Overlay */}
       {mobileSearchOpen && (

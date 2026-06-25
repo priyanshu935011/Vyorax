@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCartStore, useWishlistStore, useCompareStore, usePincodeStore, useSettingsStore } from "@/lib/store";
 import { 
   Heart, ShoppingCart, Star, HelpCircle, Truck, 
@@ -18,6 +19,7 @@ interface ProductDetailClientProps {
 }
 
 export default function ProductDetailClient({ product, allProducts }: ProductDetailClientProps) {
+  const router = useRouter();
   // Store actions
   const addItemToCart = useCartStore((state) => state.addItem);
   const { toggleItem, hasItem } = useWishlistStore();
@@ -79,6 +81,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   const [aiRecs, setAiRecs] = useState<any[]>([]);
   const [aiRecsLoading, setAiRecsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isBuying, setIsBuying] = useState(false);
 
   // Recently Viewed State
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
@@ -326,6 +329,33 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     setTimeout(() => {
       setIsAdding(false);
     }, 1000);
+  };
+
+  // Buy Now helper
+  const handleBuyNow = () => {
+    if (cityStatus !== "serviceable") {
+      usePincodeStore.setState({
+        status: "unserviceable",
+        deliveryMessage: !pincodeInput
+          ? "⚠️ Please enter and check delivery pincode first."
+          : "⚠️ Please verify a serviceable delivery pincode first."
+      });
+      document.getElementById("pincode-checker-section")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    setIsBuying(true);
+    addItemToCart({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      image: product.images[0],
+      stock: product.stock,
+      sku: product.sku,
+      isCycle, // Pass isCycle flag
+    });
+    router.push("/checkout");
   };
 
   // Add bundle to cart helper
@@ -1759,6 +1789,45 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
           </>
         )}
       </AnimatePresence>
+
+      {/* Mobile Fixed Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--charcoal)] border-t border-[var(--steel)]/80 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] flex gap-3 shadow-[0_-8px_30px_rgba(0,0,0,0.06)] md:hidden">
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock === 0 || isAdding}
+          className="flex-1 flex items-center justify-center space-x-2 py-3.5 border border-[var(--steel)] text-[var(--white)] hover:bg-[var(--steel)]/20 disabled:opacity-40 disabled:border-transparent text-xs font-extrabold uppercase tracking-widest rounded-xl transition-all"
+        >
+          {isAdding ? (
+            <>
+              <span className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />
+              <span>Adding...</span>
+            </>
+          ) : (
+            <>
+              <ShoppingCart size={14} />
+              <span>{product.stock === 0 ? "Out of Stock" : "Add to Cart"}</span>
+            </>
+          )}
+        </button>
+
+        <button
+          onClick={handleBuyNow}
+          disabled={product.stock === 0 || isBuying}
+          className="flex-1 flex items-center justify-center space-x-2 py-3.5 bg-gradient-to-r from-[var(--agni)] to-[var(--agni-light)] text-neutral-50 font-extrabold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[var(--agni)]/10 hover:shadow-[var(--agni)]/30 active:scale-[0.98] transition-all disabled:opacity-40"
+        >
+          {isBuying ? (
+            <>
+              <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+              <span>Processing...</span>
+            </>
+          ) : (
+            <>
+              <CreditCard size={14} />
+              <span>Buy Now</span>
+            </>
+          )}
+        </button>
+      </div>
 
     </div>
   );
