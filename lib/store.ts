@@ -21,7 +21,7 @@ interface CartState {
   items: CartItem[];
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
+  addItem: (item: Omit<CartItem, "quantity">, quantity?: number, skipOpen?: boolean) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -35,7 +35,7 @@ export const useCartStore = create<CartState>()(
       items: [],
       isOpen: false,
       setIsOpen: (isOpen) => set({ isOpen }),
-      addItem: (item, quantity = 1) => {
+      addItem: (item, quantity = 1, skipOpen = false) => {
         const currentItems = get().items;
         const existingItem = currentItems.find((i) => i.id === item.id);
 
@@ -49,7 +49,7 @@ export const useCartStore = create<CartState>()(
             items: currentItems.map((i) =>
               i.id === item.id ? { ...i, quantity: newQty } : i
             ),
-            isOpen: true, // open drawer on add
+            isOpen: skipOpen ? get().isOpen : true, // open drawer on add if not skipped
           });
         } else {
           if (quantity > item.stock) {
@@ -58,7 +58,7 @@ export const useCartStore = create<CartState>()(
           }
           set({
             items: [...currentItems, { ...item, quantity }],
-            isOpen: true, // open drawer on add
+            isOpen: skipOpen ? get().isOpen : true, // open drawer on add if not skipped
           });
         }
       },

@@ -258,6 +258,7 @@ export default function Header() {
 
             {/* Cart Icon Toggle */}
             <button
+              id="header-cart-icon"
               onClick={() => setIsOpen(true)}
               className="relative p-1 text-[var(--silver)] hover:text-[var(--white)] transition-colors focus:outline-none"
               title="Shopping Cart"

@@ -22,6 +22,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   const router = useRouter();
   // Store actions
   const addItemToCart = useCartStore((state) => state.addItem);
+  const setIsOpen = useCartStore((state) => state.setIsOpen);
   const { toggleItem, hasItem } = useWishlistStore();
   const { products: compareList, addProduct: addToCompare, removeProduct: removeFromCompare, hasProduct: isComparing } = useCompareStore();
 
@@ -82,6 +83,7 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
   const [aiRecsLoading, setAiRecsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
+  const [flyingItems, setFlyingItems] = useState<{ id: number; startX: number; startY: number; endX: number; endY: number }[]>([]);
 
   // Recently Viewed State
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
@@ -302,8 +304,44 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
     return `https://wa.me/919999999999?text=${encodeURIComponent(text)}`;
   };
 
+  // Fly-to-Cart Animation Trigger
+  const triggerFlyToCartAnimation = (e?: React.MouseEvent) => {
+    const dest = document.getElementById("header-cart-icon");
+    if (!dest) {
+      // Fallback: Open cart drawer directly if header icon is missing
+      setIsOpen(true);
+      return;
+    }
+
+    const destRect = dest.getBoundingClientRect();
+    const endX = destRect.left + destRect.width / 2;
+    const endY = destRect.top + destRect.height / 2;
+
+    let startX = window.innerWidth / 2;
+    let startY = window.innerHeight / 2;
+
+    if (e && e.clientX && e.clientY) {
+      startX = e.clientX;
+      startY = e.clientY;
+    } else if (e && e.currentTarget) {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      startX = rect.left + rect.width / 2;
+      startY = rect.top + rect.height / 2;
+    }
+
+    const newFlyItem = {
+      id: Date.now() + Math.random(),
+      startX,
+      startY,
+      endX,
+      endY,
+    };
+
+    setFlyingItems((prev) => [...prev, newFlyItem]);
+  };
+
   // Add to cart helper
-  const handleAddToCart = () => {
+  const handleAddToCart = (e?: React.MouseEvent) => {
     if (cityStatus !== "serviceable") {
       usePincodeStore.setState({
         status: "unserviceable",
@@ -325,7 +363,10 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
       stock: product.stock,
       sku: product.sku,
       isCycle, // Pass isCycle flag
-    });
+    }, 1, true);
+
+    triggerFlyToCartAnimation(e);
+
     setTimeout(() => {
       setIsAdding(false);
     }, 1000);
@@ -1828,6 +1869,64 @@ export default function ProductDetailClient({ product, allProducts }: ProductDet
           )}
         </button>
       </div>
+
+      {/* Flying Elements Renderer */}
+      {flyingItems.map((item) => (
+        <motion.div
+          key={item.id}
+          initial={{
+            x: item.startX - 28,
+            y: item.startY - 28,
+            scale: 1,
+            opacity: 1,
+          }}
+          animate={{
+            x: [
+              item.startX - 28,
+              (item.startX + item.endX) / 2 - 28,
+              item.endX - 28,
+            ],
+            y: [
+              item.startY - 28,
+              Math.min(item.startY, item.endY) - 150 - 28,
+              item.endY - 28,
+            ],
+            scale: [1, 0.6, 0.15],
+            opacity: [1, 0.9, 0],
+          }}
+          transition={{
+            duration: 0.85,
+            ease: "easeInOut",
+          }}
+          onAnimationComplete={() => {
+            // Remove from list
+            setFlyingItems((prev) => prev.filter((fi) => fi.id !== item.id));
+
+            // Trigger bounce reaction on the header cart button
+            const cartIcon = document.getElementById("header-cart-icon");
+            if (cartIcon) {
+              cartIcon.classList.add("animate-bounce-subtle");
+              setTimeout(() => {
+                cartIcon.classList.remove("animate-bounce-subtle");
+              }, 400);
+            }
+
+            // Open the cart drawer
+            setIsOpen(true);
+          }}
+          className="fixed left-0 top-0 w-14 h-14 rounded-full border-2 border-[var(--agni)] shadow-2xl overflow-hidden bg-[var(--obsidian)] z-50 pointer-events-none flex items-center justify-center"
+        >
+          <div className="w-10 h-10 relative">
+            <Image
+              src={product.images[0]}
+              alt="flying item"
+              fill
+              className="object-contain animate-pulse"
+              sizes="40px"
+            />
+          </div>
+        </motion.div>
+      ))}
 
     </div>
   );
