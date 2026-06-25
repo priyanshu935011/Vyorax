@@ -85,10 +85,14 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
   if (variant === "arched") {
     return (
-      <Link
-        href={`/products/${product.slug}`}
-        className="group flex flex-col justify-between transition-all duration-300 relative w-full"
-      >
+      <div className="group flex flex-col justify-between transition-all duration-300 relative w-full">
+        {/* Transparent Overlay Link for Card Navigation */}
+        <Link
+          href={`/products/${product.slug}`}
+          className="absolute inset-0 z-10"
+          aria-label={`View ${product.name}`}
+        />
+
         {/* Wishlist Heart Icon */}
         <button
           onClick={handleWishlist}
@@ -179,20 +183,26 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           <button
             onClick={handleAddToCart}
             disabled={isAdding || product.stock === 0}
-            className="w-full mt-3 bg-[#ffffff] text-[#000000] font-extrabold text-xs py-2 rounded-full border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-[#f3f4f6] disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full mt-3 bg-[#ffffff] text-[#000000] font-extrabold text-xs py-2 rounded-full border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-[#f3f4f6] disabled:opacity-50 disabled:pointer-events-none z-20 relative"
           >
             {isAdding ? "Adding..." : "Add to Cart"}
           </button>
         </div>
-      </Link>
+      </div>
     );
   }
 
   return (
-    <Link
-      href={`/products/${product.slug}`}
+    <div
       className="group bg-[var(--charcoal)] border border-[var(--steel)]/60 rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-agni-glow hover:border-[var(--agni)]/40 relative"
     >
+      {/* Transparent Overlay Link for Card Navigation */}
+      <Link
+        href={`/products/${product.slug}`}
+        className="absolute inset-0 z-10"
+        aria-label={`View ${product.name}`}
+      />
+
       {/* Wishlist Heart Icon */}
       <button
         onClick={handleWishlist}
@@ -229,7 +239,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
         />
 
         {/* Quick Add Overlay on Hover (Desktop only) */}
-        <div className="hidden md:flex absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-end justify-center pb-6">
+        <div className="hidden md:flex absolute inset-0 z-20 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-end justify-center pb-6">
           <button
             onClick={handleAddToCart}
             disabled={isAdding || product.stock === 0}
@@ -301,6 +311,6 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
